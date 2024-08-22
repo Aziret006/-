@@ -1,4 +1,3 @@
-// Создание и стилизация контейнера формы
 const formContainer = document.createElement("div");
 formContainer.style.width = "400px";
 formContainer.style.margin = "0 auto";
@@ -99,6 +98,11 @@ submitButton.style.transition =
 submitButton.disabled = true;
 formContainer.appendChild(submitButton);
 
+const validateCardNumber = (number) =>
+  /^\d{16}$/.test(number.replace(/\s/g, ""));
+const validateExpiryDate = (date) => /^(0[1-9]|1[0-2]) \/ \d{4}$/.test(date);
+const validateCVV = (cvv) => /^\d{3}$/.test(cvv);
+
 const inputs = [cardInput, expiryInput, cvcInput];
 inputs.forEach((input) => {
   input.addEventListener("focus", () => {
@@ -111,13 +115,10 @@ inputs.forEach((input) => {
   });
 
   input.addEventListener("input", () => {
-    let isValid = true;
-
-    inputs.forEach((input) => {
-      if (input.value.trim() === "") {
-        isValid = false;
-      }
-    });
+    let isValid =
+      validateCardNumber(cardInput.value) &&
+      validateExpiryDate(expiryInput.value) &&
+      validateCVV(cvcInput.value);
 
     if (isValid) {
       submitButton.style.backgroundColor = "#ff8c00";
