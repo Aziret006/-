@@ -1,5 +1,5 @@
 const formContainer = document.createElement("div");
-formContainer.style.width = "400px";
+formContainer.style.width = "300px";
 formContainer.style.margin = "0 auto";
 formContainer.style.padding = "20px";
 formContainer.style.border = "1px solid #ddd";
@@ -19,6 +19,7 @@ const labelCardNumber = document.createElement("label");
 labelCardNumber.textContent = "CARD NUMBER:";
 labelCardNumber.style.marginBottom = "5px";
 labelCardNumber.style.display = "block";
+labelCardNumber.style.fontSize = "12px";
 formContainer.appendChild(labelCardNumber);
 
 const cardInput = document.createElement("input");
@@ -44,6 +45,7 @@ expiryContainer.style.width = "40%";
 
 const labelExpiry = document.createElement("label");
 labelExpiry.textContent = "EXPIRATION DATE:";
+labelExpiry.style.fontSize = "12px";
 labelExpiry.style.marginBottom = "5px";
 labelExpiry.style.display = "block";
 expiryContainer.appendChild(labelExpiry);
@@ -69,6 +71,7 @@ const labelCVC = document.createElement("label");
 labelCVC.textContent = "CVV:";
 labelCVC.style.marginBottom = "5px";
 labelCVC.style.display = "block";
+labelCVC.style.fontSize = "12px";
 cvcContainer.appendChild(labelCVC);
 
 const cvcInput = document.createElement("input");
@@ -103,16 +106,15 @@ formContainer.appendChild(submitButton);
 
 const inputs = [cardInput, expiryInput, cvcInput];
 
-// Валидация ввода
 const validateInput = (input, regex) => {
   input.addEventListener("input", () => {
     input.value = input.value.replace(regex, "");
   });
 };
 
-validateInput(cardInput, /[^0-9 ]/g); // Только цифры и пробелы для номера карты
-validateInput(expiryInput, /[^0-9/]/g); // Только цифры и символ "/"
-validateInput(cvcInput, /[^0-9]/g); // Только цифры
+validateInput(cardInput, /[^0-9 ]/g);
+validateInput(expiryInput, /[^0-9/]/g);
+validateInput(cvcInput, /[^0-9]/g);
 
 inputs.forEach((input) => {
   input.addEventListener("focus", () => {
