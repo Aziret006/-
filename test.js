@@ -24,6 +24,7 @@ formContainer.appendChild(labelCardNumber);
 const cardInput = document.createElement("input");
 cardInput.type = "text";
 cardInput.placeholder = "0000 0000 0000 0000";
+cardInput.maxLength = 19;
 cardInput.style.width = "93%";
 cardInput.style.padding = "10px";
 cardInput.style.marginBottom = "20px";
@@ -50,6 +51,7 @@ expiryContainer.appendChild(labelExpiry);
 const expiryInput = document.createElement("input");
 expiryInput.type = "text";
 expiryInput.placeholder = "MM / YYYY";
+expiryInput.maxLength = 7;
 expiryInput.style.width = "100%";
 expiryInput.style.padding = "10px";
 expiryInput.style.border = "1px solid #ccc";
@@ -72,6 +74,7 @@ cvcContainer.appendChild(labelCVC);
 const cvcInput = document.createElement("input");
 cvcInput.type = "text";
 cvcInput.placeholder = "000";
+cvcInput.maxLength = 3;
 cvcInput.style.width = "100%";
 cvcInput.style.padding = "10px";
 cvcInput.style.border = "1px solid #ccc";
@@ -98,12 +101,19 @@ submitButton.style.transition =
 submitButton.disabled = true;
 formContainer.appendChild(submitButton);
 
-const validateCardNumber = (number) =>
-  /^\d{16}$/.test(number.replace(/\s/g, ""));
-const validateExpiryDate = (date) => /^(0[1-9]|1[0-2]) \/ \d{4}$/.test(date);
-const validateCVV = (cvv) => /^\d{3}$/.test(cvv);
-
 const inputs = [cardInput, expiryInput, cvcInput];
+
+// Валидация ввода
+const validateInput = (input, regex) => {
+  input.addEventListener("input", () => {
+    input.value = input.value.replace(regex, "");
+  });
+};
+
+validateInput(cardInput, /[^0-9 ]/g); // Только цифры и пробелы для номера карты
+validateInput(expiryInput, /[^0-9/]/g); // Только цифры и символ "/"
+validateInput(cvcInput, /[^0-9]/g); // Только цифры
+
 inputs.forEach((input) => {
   input.addEventListener("focus", () => {
     input.style.transform = "scale(1.05)";
@@ -115,10 +125,13 @@ inputs.forEach((input) => {
   });
 
   input.addEventListener("input", () => {
-    let isValid =
-      validateCardNumber(cardInput.value) &&
-      validateExpiryDate(expiryInput.value) &&
-      validateCVV(cvcInput.value);
+    let isValid = true;
+
+    inputs.forEach((input) => {
+      if (input.value.trim() === "") {
+        isValid = false;
+      }
+    });
 
     if (isValid) {
       submitButton.style.backgroundColor = "#ff8c00";
